@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,10 +25,9 @@ fun Banner(manga: RecommendationsItem){
             .width(200.dp)
             .height(250.dp)
             .padding(end = 8.dp)
+            .shadow(10.dp, shape = RoundedCornerShape(20.dp))
             .clip(RoundedCornerShape(20.dp)),
         color = colorResource(R.color.teal),
-        shape = RoundedCornerShape(20.dp),
-        shadowElevation = 100.dp
     ){
         AsyncImage(model = manga.recommendation.pictureUrl, contentDescription = stringResource(R.string.picture),
             modifier = Modifier.width(200.dp).height(250.dp))
