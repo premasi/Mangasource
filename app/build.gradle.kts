@@ -15,7 +15,9 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "BASE_URL", "\"https://myanimelist.p.rapidapi.com/v2/\"")
+        buildConfigField("String", "RAPID_KEY", "\"56f71b7debmsha5bf497796cb7cfp1e48b9jsn6f7bb115bf7e\"")
+        buildConfigField("String", "RAPID_HOST", "\"myanimelist.p.rapidapi.com\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -40,6 +42,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
