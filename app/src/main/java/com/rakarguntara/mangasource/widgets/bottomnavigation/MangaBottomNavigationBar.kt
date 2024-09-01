@@ -43,8 +43,8 @@ fun MangaBottomNavigationBar(navController: NavController) {
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.White,
                 selectedTextColor = Color.White,
-                unselectedIconColor = Color.Gray,
-                unselectedTextColor = Color.Gray,
+                unselectedIconColor = Color.Black,
+                unselectedTextColor = Color.Black,
                 indicatorColor = colorResource(R.color.teal_700),
             )
         )
@@ -67,8 +67,8 @@ fun MangaBottomNavigationBar(navController: NavController) {
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.White,
                 selectedTextColor = Color.White,
-                unselectedIconColor = Color.Gray,
-                unselectedTextColor = Color.Gray,
+                unselectedIconColor = Color.Black,
+                unselectedTextColor = Color.Black,
                 indicatorColor = colorResource(R.color.teal_700)
             )
         )
@@ -91,8 +91,8 @@ fun MangaBottomNavigationBar(navController: NavController) {
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.White,
                 selectedTextColor = Color.White,
-                unselectedIconColor = Color.Gray,
-                unselectedTextColor = Color.Gray,
+                unselectedIconColor = Color.Black,
+                unselectedTextColor = Color.Black,
                 indicatorColor = colorResource(R.color.teal_700)
             )
         )

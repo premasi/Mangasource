@@ -16,10 +16,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.rakarguntara.mangasource.R
-import com.rakarguntara.mangasource.models.RecommendationsItem
+import com.rakarguntara.mangasource.models.AnimeRecommendationsItem
 
 @Composable
-fun BannerRecommendations(manga: RecommendationsItem){
+fun BannerAnimeRecommendations(anime: AnimeRecommendationsItem){
     Surface(
         modifier = Modifier
             .padding(end = 8.dp)
@@ -27,7 +27,7 @@ fun BannerRecommendations(manga: RecommendationsItem){
             .clip(RoundedCornerShape(20.dp)),
         color = colorResource(R.color.teal),
     ){
-        AsyncImage(model = manga.recommendation.pictureUrl, contentDescription = stringResource(R.string.picture),
+        AsyncImage(model = anime.recommendation.pictureUrl, contentDescription = stringResource(R.string.picture),
             modifier = Modifier.width(100.dp).height(150.dp),
             contentScale = ContentScale.Fit,
             placeholder = painterResource(R.drawable.ic_launcher_background)

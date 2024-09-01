@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rakarguntara.mangasource.models.AnimeRecommendationsItem
 import com.rakarguntara.mangasource.models.MangaTopResponseItem
 import com.rakarguntara.mangasource.models.RecommendationsItem
 import com.rakarguntara.mangasource.network.ResponseState
@@ -23,9 +24,14 @@ class HomeViewModel @Inject constructor(private val networkRepository: NetworkRe
         mutableStateOf(ResponseState<List<MangaTopResponseItem>, Boolean, Exception>())
     val mangaTops get() = _mangaTops
 
+    private val _animeRecommendations : MutableState<ResponseState<List<AnimeRecommendationsItem>, Boolean, Exception>> =
+        mutableStateOf(ResponseState<List<AnimeRecommendationsItem>, Boolean, Exception>())
+    val animeRecommendation get() = _animeRecommendations
+
     init {
         getMangaRecommendations(1)
         getMangaTops("category", 1)
+        getAnimeRecommendations(1)
     }
 
     private fun getMangaRecommendations(number: Int) {
@@ -53,7 +59,7 @@ class HomeViewModel @Inject constructor(private val networkRepository: NetworkRe
         viewModelScope.launch {
             if(category.isEmpty() && number != 1) return@launch
             _mangaTops.value = ResponseState(loading = true)
-            val  response = networkRepository.getMangaTops(category, number)
+            val response = networkRepository.getMangaTops(category, number)
             response.data.let { manga ->
                 if(manga != null){
                     _mangaTops.value = ResponseState(data = manga, loading = false)
@@ -65,6 +71,25 @@ class HomeViewModel @Inject constructor(private val networkRepository: NetworkRe
                     }
                 }
 
+            }
+        }
+    }
+
+    private fun getAnimeRecommendations(number: Int){
+        viewModelScope.launch {
+            if(number != 1) return@launch
+            _animeRecommendations.value = ResponseState(loading = true)
+            val response = networkRepository.getAnimeRecommendations(number)
+            response.data.let { manga ->
+                if(manga != null){
+                    _animeRecommendations.value = ResponseState(data = manga, loading = false)
+                    Log.d("ANIME RECOMMENDATIONS", "getAnimeRecommendations: $manga")
+                } else {
+                    response.e.let { e->
+                        _animeRecommendations.value = ResponseState(e = e)
+                        Log.d("ANIME RECOMMENDATIONS ERROR", "getAnimeRecommendations: $e")
+                    }
+                }
             }
         }
     }

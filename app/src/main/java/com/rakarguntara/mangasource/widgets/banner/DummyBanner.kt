@@ -10,16 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import com.rakarguntara.mangasource.R
 
 @Composable
 fun DummyBanner() {
     Surface(
         modifier = Modifier
-            .width(200.dp)
-            .height(250.dp)
+            .width(100.dp)
+            .height(150.dp)
             .padding(end = 8.dp)
             .shadow(10.dp, shape = RoundedCornerShape(20.dp))
             .clip(RoundedCornerShape(20.dp)),

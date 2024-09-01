@@ -28,7 +28,7 @@ fun BannerTops(manga: MangaTopResponseItem){
         color = colorResource(R.color.teal),
     ){
         AsyncImage(model = manga.pictureUrl, contentDescription = stringResource(R.string.picture),
-            modifier = Modifier.width(200.dp).height(250.dp),
+            modifier = Modifier.width(100.dp).height(150.dp),
             contentScale = ContentScale.Fit,
             placeholder = painterResource(R.drawable.ic_launcher_background)
         )

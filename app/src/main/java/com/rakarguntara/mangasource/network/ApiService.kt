@@ -1,6 +1,7 @@
 package com.rakarguntara.mangasource.network
 
 import com.rakarguntara.mangasource.BuildConfig
+import com.rakarguntara.mangasource.models.AnimeRecommendationsResponse
 import com.rakarguntara.mangasource.models.MangaRecommendationsResponse
 import com.rakarguntara.mangasource.models.MangaTopResponseItem
 import retrofit2.http.GET
@@ -12,7 +13,7 @@ import javax.inject.Singleton
 @Singleton
 interface ApiService {
  @GET("v2/manga/recommendations")
- suspend fun getMangaRecomenndations(
+ suspend fun getMangaRecommendations(
   @Header("x-rapidapi-key") key : String = BuildConfig.RAPID_KEY,
   @Header("x-rapidapi-host") host: String = BuildConfig.RAPID_HOST,
   @Query("p") number: Int,
@@ -25,5 +26,12 @@ interface ApiService {
   @Path("category") category: String,
   @Query("p") number: Int,
  ) : List<MangaTopResponseItem>
+
+ @GET("v2/anime/recommendations")
+ suspend fun getAnimeRecommendations(
+  @Header("x-rapidapi-key") key: String = BuildConfig.RAPID_KEY,
+  @Header("x-rapidapi-host") host: String = BuildConfig.RAPID_HOST,
+  @Query("p") number: Int
+ ) : AnimeRecommendationsResponse
 }
 

@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,6 +33,7 @@ import androidx.navigation.NavController
 import com.rakarguntara.mangasource.R
 import com.rakarguntara.mangasource.components.DummyBannerIndicator
 import com.rakarguntara.mangasource.viewmodels.home.HomeViewModel
+import com.rakarguntara.mangasource.widgets.banner.BannerAnimeRecommendations
 import com.rakarguntara.mangasource.widgets.banner.BannerRecommendations
 import com.rakarguntara.mangasource.widgets.banner.BannerTops
 
@@ -44,7 +47,8 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ){
@@ -75,8 +79,37 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                 MangaRecommendations(navController, homeViewModel)
                 Box(modifier = Modifier.height(16.dp))
                 MangaTops(navController, homeViewModel)
+                Box(modifier = Modifier.height(16.dp))
+                AnimeRecommendations(navController, homeViewModel)
             }
         }
+    }
+}
+
+@Composable
+fun AnimeRecommendations(navController: NavController, homeViewModel: HomeViewModel) {
+    Text("Anime Recommendations", style = TextStyle(
+        color = Color.Black.copy(0.9f),
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp
+    ))
+    Box(modifier = Modifier.height(8.dp))
+    val animeRecommendationData = homeViewModel.animeRecommendation.value
+    if(animeRecommendationData.loading == true){
+        DummyBannerIndicator(true)
+    } else {
+        DummyBannerIndicator(false)
+        val data = animeRecommendationData.data
+        if(data != null){
+            LazyRow(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(items = data){anime ->
+                    BannerAnimeRecommendations(anime)
+                }
+            }
+        }
+
     }
 }
 
