@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rakarguntara.mangasource.models.MangaTopResponseItem
 import com.rakarguntara.mangasource.models.RecommendationsItem
 import com.rakarguntara.mangasource.network.ResponseState
 import com.rakarguntara.mangasource.repository.NetworkRepository
@@ -18,8 +19,13 @@ class HomeViewModel @Inject constructor(private val networkRepository: NetworkRe
         mutableStateOf(ResponseState<List<RecommendationsItem>, Boolean, Exception>())
     val mangaRecommendation get() = _mangaRecommendations
 
+    private val _mangaTops : MutableState<ResponseState<List<MangaTopResponseItem>, Boolean, Exception>> =
+        mutableStateOf(ResponseState<List<MangaTopResponseItem>, Boolean, Exception>())
+    val mangaTops get() = _mangaTops
+
     init {
         getMangaRecommendations(1)
+        getMangaTops("category", 1)
     }
 
     private fun getMangaRecommendations(number: Int) {
@@ -37,6 +43,26 @@ class HomeViewModel @Inject constructor(private val networkRepository: NetworkRe
                         Log.d("MANGA RECOMMENDATIONS ERROR", "getMangaRecommendations: $e")
                     }
 
+                }
+
+            }
+        }
+    }
+
+    private fun getMangaTops(category: String, number: Int){
+        viewModelScope.launch {
+            if(category.isEmpty() && number != 1) return@launch
+            _mangaTops.value = ResponseState(loading = true)
+            val  response = networkRepository.getMangaTops(category, number)
+            response.data.let { manga ->
+                if(manga != null){
+                    _mangaTops.value = ResponseState(data = manga, loading = false)
+                    Log.d("MANGA TOPS", "getMangaTops: $manga")
+                } else {
+                    response.e.let { e->
+                        _mangaTops.value = ResponseState(e = e)
+                        Log.d("MANGA TOPS ERROR", "getMangaTops: $e")
+                    }
                 }
 
             }

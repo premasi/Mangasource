@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,9 +29,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.rakarguntara.mangasource.R
-import com.rakarguntara.mangasource.components.LoadingIndicator
+import com.rakarguntara.mangasource.components.DummyBannerIndicator
 import com.rakarguntara.mangasource.viewmodels.home.HomeViewModel
-import com.rakarguntara.mangasource.widgets.banner.Banner
+import com.rakarguntara.mangasource.widgets.banner.BannerRecommendations
+import com.rakarguntara.mangasource.widgets.banner.BannerTops
 
 @Composable
 fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hiltViewModel()) {
@@ -74,13 +74,34 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                 Box(modifier = Modifier.height(16.dp))
                 MangaRecommendations(navController, homeViewModel)
                 Box(modifier = Modifier.height(16.dp))
-                Text(
-                    stringResource(R.string.top_manga), style = TextStyle(
-                    color = Color.Black.copy(0.9f),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                ))
+                MangaTops(navController, homeViewModel)
+            }
+        }
+    }
+}
 
+@Composable
+fun MangaTops(navController: NavController, homeViewModel: HomeViewModel){
+    Text(
+        stringResource(R.string.top_manga), style = TextStyle(
+            color = Color.Black.copy(0.9f),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium
+        ))
+    Box(modifier = Modifier.height(8.dp))
+    val mangaTops = homeViewModel.mangaTops.value
+    if(mangaTops.loading == true){
+        DummyBannerIndicator(true)
+    } else {
+        DummyBannerIndicator(false)
+        val data = mangaTops.data
+        if(data != null){
+            LazyRow(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(items = data){manga ->
+                    BannerTops(manga)
+                }
             }
         }
     }
@@ -96,14 +117,14 @@ fun MangaRecommendations(navController: NavController, homeViewModel: HomeViewMo
     Box(modifier = Modifier.height(8.dp))
     val mangaRecommendationData = homeViewModel.mangaRecommendation.value
     if(mangaRecommendationData.loading == true){
-        LoadingIndicator(true)
+        DummyBannerIndicator(true)
     } else {
-        LoadingIndicator(false)
+        DummyBannerIndicator(false)
         val data = mangaRecommendationData.data
         if(data != null){
             LazyRow(modifier = Modifier.fillMaxWidth()) {
                 items(items = data){manga ->
-                    Banner(manga)
+                    BannerRecommendations(manga)
                 }
             }
             Log.d("MANGA RECOMMENDATIONS DATA", "getMangaRecommendations: $mangaRecommendationData")
