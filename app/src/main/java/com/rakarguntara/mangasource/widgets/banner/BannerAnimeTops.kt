@@ -20,11 +20,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.rakarguntara.mangasource.R
-import com.rakarguntara.mangasource.models.MangaTopResponseItem
+import com.rakarguntara.mangasource.models.AnimeTopResponseItem
 import kotlinx.coroutines.delay
 
 @Composable
-fun BannerTops(manga: MangaTopResponseItem, onClick: (String) -> Unit = {}){
+fun BannerAnimeTops(anime: AnimeTopResponseItem, onClick: (String) -> Unit = {}){
     val tapStatus = remember { mutableStateOf(false) }
     if(tapStatus.value){
         LaunchedEffect(Unit){
@@ -34,16 +34,16 @@ fun BannerTops(manga: MangaTopResponseItem, onClick: (String) -> Unit = {}){
     }
     Surface(
         modifier = Modifier
-            .padding(end = 8.dp)
             .clickable {
                 tapStatus.value = true
-                onClick.invoke(manga.myanimelistId.toString())
+                onClick.invoke(anime.myanimelistId.toString())
             }
+            .padding(end = 8.dp)
             .shadow(10.dp, shape = RoundedCornerShape(20.dp))
             .clip(RoundedCornerShape(20.dp)),
         color = colorResource(R.color.teal),
     ){
-        AsyncImage(model = manga.pictureUrl, contentDescription = stringResource(R.string.picture),
+        AsyncImage(model = anime.pictureUrl, contentDescription = stringResource(R.string.picture),
             modifier = Modifier.width(100.dp).height(150.dp),
             contentScale = ContentScale.Fit,
             placeholder = painterResource(R.drawable.ic_launcher_background)

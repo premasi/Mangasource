@@ -1,6 +1,7 @@
 package com.rakarguntara.mangasource.screens.main
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +19,6 @@ fun MainScreen(navController: NavController) {
             MangaBottomNavigationBar(bottomNavController)
         }
     ) {
-        MangaBottomNavigation(bottomNavController)
+        MangaBottomNavigation(bottomNavController, navController, Modifier.padding(it))
     }
 }

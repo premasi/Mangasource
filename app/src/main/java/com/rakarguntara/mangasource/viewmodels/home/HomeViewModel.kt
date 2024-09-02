@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rakarguntara.mangasource.models.AnimeRecommendationsItem
+import com.rakarguntara.mangasource.models.AnimeTopResponseItem
 import com.rakarguntara.mangasource.models.MangaTopResponseItem
 import com.rakarguntara.mangasource.models.RecommendationsItem
 import com.rakarguntara.mangasource.network.ResponseState
@@ -28,10 +29,15 @@ class HomeViewModel @Inject constructor(private val networkRepository: NetworkRe
         mutableStateOf(ResponseState<List<AnimeRecommendationsItem>, Boolean, Exception>())
     val animeRecommendation get() = _animeRecommendations
 
+    private val _animeTops : MutableState<ResponseState<List<AnimeTopResponseItem>, Boolean, Exception>> =
+        mutableStateOf(ResponseState<List<AnimeTopResponseItem>, Boolean, Exception>())
+    val animeTops get() = _animeTops
+
     init {
         getMangaRecommendations(1)
         getMangaTops("category", 1)
         getAnimeRecommendations(1)
+        getAnimeTops("category", 1)
     }
 
     private fun getMangaRecommendations(number: Int) {
@@ -57,7 +63,7 @@ class HomeViewModel @Inject constructor(private val networkRepository: NetworkRe
 
     private fun getMangaTops(category: String, number: Int){
         viewModelScope.launch {
-            if(category.isEmpty() && number != 1) return@launch
+            if(category.isEmpty() || number != 1) return@launch
             _mangaTops.value = ResponseState(loading = true)
             val response = networkRepository.getMangaTops(category, number)
             response.data.let { manga ->
@@ -80,14 +86,33 @@ class HomeViewModel @Inject constructor(private val networkRepository: NetworkRe
             if(number != 1) return@launch
             _animeRecommendations.value = ResponseState(loading = true)
             val response = networkRepository.getAnimeRecommendations(number)
-            response.data.let { manga ->
-                if(manga != null){
-                    _animeRecommendations.value = ResponseState(data = manga, loading = false)
-                    Log.d("ANIME RECOMMENDATIONS", "getAnimeRecommendations: $manga")
+            response.data.let { anime ->
+                if(anime != null){
+                    _animeRecommendations.value = ResponseState(data = anime, loading = false)
+                    Log.d("ANIME RECOMMENDATIONS", "getAnimeRecommendations: $anime")
                 } else {
                     response.e.let { e->
                         _animeRecommendations.value = ResponseState(e = e)
                         Log.d("ANIME RECOMMENDATIONS ERROR", "getAnimeRecommendations: $e")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getAnimeTops(category: String, number: Int){
+        viewModelScope.launch {
+            if(category.isEmpty() || number != 1) return@launch
+            _animeTops.value = ResponseState(loading = true)
+            val response = networkRepository.getAnimeTops(category, number)
+            response.data.let { anime ->
+                if(anime != null){
+                    _animeTops.value = ResponseState(data = anime, loading = false)
+                    Log.d("ANIME TOPS", "getAnimeTops: $anime")
+                } else {
+                    response.e.let { e ->
+                        _animeTops.value = ResponseState(e = e)
+                        Log.d("ANIME TOPS ERROR", "getAnimeTops: $e")
                     }
                 }
             }

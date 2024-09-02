@@ -32,8 +32,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.rakarguntara.mangasource.R
 import com.rakarguntara.mangasource.components.DummyBannerIndicator
+import com.rakarguntara.mangasource.navigations.NavigationScreens
 import com.rakarguntara.mangasource.viewmodels.home.HomeViewModel
 import com.rakarguntara.mangasource.widgets.banner.BannerAnimeRecommendations
+import com.rakarguntara.mangasource.widgets.banner.BannerAnimeTops
 import com.rakarguntara.mangasource.widgets.banner.BannerRecommendations
 import com.rakarguntara.mangasource.widgets.banner.BannerTops
 
@@ -42,13 +44,15 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
     Scaffold { innerPadding ->
         Surface(
             modifier = Modifier.padding(innerPadding)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             color = Color.White
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth()
                     .padding(16.dp)
-                    .verticalScroll(rememberScrollState()),
+                    .padding(bottom = 100.dp)
+                    ,
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ){
@@ -81,6 +85,34 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                 MangaTops(navController, homeViewModel)
                 Box(modifier = Modifier.height(16.dp))
                 AnimeRecommendations(navController, homeViewModel)
+                Box(modifier = Modifier.height(16.dp))
+                AnimeTops(navController, homeViewModel)
+            }
+        }
+    }
+}
+
+@Composable
+fun AnimeTops(navController: NavController, homeViewModel: HomeViewModel) {
+    Text("Anime Tops", style = TextStyle(
+        color = Color.Black.copy(0.9f),
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp
+    ))
+    Box(modifier = Modifier.height(8.dp))
+    val animeTopsData = homeViewModel.animeTops.value
+    if(animeTopsData.loading == true){
+        DummyBannerIndicator(true)
+    } else {
+        DummyBannerIndicator(false)
+        val data = animeTopsData.data
+        if(data != null){
+            LazyRow(modifier = Modifier.fillMaxWidth()) {
+                items(items = data){anime ->
+                    BannerAnimeTops(anime){id ->
+                        navController.navigate("${NavigationScreens.DetailScreen.name}/anime/$id")
+                    }
+                }
             }
         }
     }
@@ -105,7 +137,9 @@ fun AnimeRecommendations(navController: NavController, homeViewModel: HomeViewMo
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(items = data){anime ->
-                    BannerAnimeRecommendations(anime)
+                    BannerAnimeRecommendations(anime){id ->
+                        navController.navigate("${NavigationScreens.DetailScreen.name}/anime/$id")
+                    }
                 }
             }
         }
@@ -133,7 +167,9 @@ fun MangaTops(navController: NavController, homeViewModel: HomeViewModel){
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(items = data){manga ->
-                    BannerTops(manga)
+                    BannerTops(manga){id ->
+                        navController.navigate("${NavigationScreens.DetailScreen.name}/manga/$id")
+                    }
                 }
             }
         }
@@ -157,7 +193,9 @@ fun MangaRecommendations(navController: NavController, homeViewModel: HomeViewMo
         if(data != null){
             LazyRow(modifier = Modifier.fillMaxWidth()) {
                 items(items = data){manga ->
-                    BannerRecommendations(manga)
+                    BannerRecommendations(manga){id ->
+                        navController.navigate("${NavigationScreens.DetailScreen.name}/manga/$id")
+                    }
                 }
             }
             Log.d("MANGA RECOMMENDATIONS DATA", "getMangaRecommendations: $mangaRecommendationData")

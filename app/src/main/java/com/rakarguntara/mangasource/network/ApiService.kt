@@ -2,6 +2,7 @@ package com.rakarguntara.mangasource.network
 
 import com.rakarguntara.mangasource.BuildConfig
 import com.rakarguntara.mangasource.models.AnimeRecommendationsResponse
+import com.rakarguntara.mangasource.models.AnimeTopResponseItem
 import com.rakarguntara.mangasource.models.MangaRecommendationsResponse
 import com.rakarguntara.mangasource.models.MangaTopResponseItem
 import retrofit2.http.GET
@@ -33,5 +34,13 @@ interface ApiService {
   @Header("x-rapidapi-host") host: String = BuildConfig.RAPID_HOST,
   @Query("p") number: Int
  ) : AnimeRecommendationsResponse
+
+ @GET("anime/top/{category}")
+ suspend fun getAnimeTops(
+  @Header("x-rapidapi-key") key: String = BuildConfig.RAPID_KEY,
+  @Header("x-rapidapi-host") host: String = BuildConfig.RAPID_HOST,
+  @Path("category") category: String,
+  @Query("q") number: Int
+ ) : List<AnimeTopResponseItem>
 }
 
