@@ -1,6 +1,7 @@
 package com.rakarguntara.mangasource.navigations
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -9,6 +10,7 @@ import androidx.navigation.navArgument
 import com.rakarguntara.mangasource.screens.detail.DetailScreen
 import com.rakarguntara.mangasource.screens.main.MainScreen
 import com.rakarguntara.mangasource.screens.splash.SplashScreen
+import com.rakarguntara.mangasource.viewmodels.detail.DetailViewModel
 
 @Composable
 fun MangaNavigation() {
@@ -34,8 +36,9 @@ fun MangaNavigation() {
         ){ backStackEntry ->
             val type = backStackEntry.arguments?.getString("type") ?: ""
             val id = backStackEntry.arguments?.getString("id") ?: ""
+            val detailViewModel = hiltViewModel<DetailViewModel>()
 
-            DetailScreen(navController = navController, type = type, id = id)
+            DetailScreen(navController = navController, type = type, id = id, detailViewModel)
         }
     }
 }
